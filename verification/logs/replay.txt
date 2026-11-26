@@ -1,0 +1,2 @@
+Passed 78 SAT + 2 UNSAT exact path fixtures and 59048 nonzero RHS sign patterns
+Worked flow: 6 nondegenerate vertices; tied/ordered/bypass optima checked exactly.

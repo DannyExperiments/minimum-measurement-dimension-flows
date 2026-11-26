@@ -1,0 +1,106 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[hmargin=.83in,vmargin=.70in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Minimum measurement dimension for capacitated network flows}}
+\urlstyle{same}
+\setlength{\emergencystretch}{2em}
+\linespread{0.95}
+\DeclareMathSizes{8}{8}{8}{8}
+\DeclareMathSizes{9}{9}{8}{8}
+\DeclareMathSizes{10.95}{10.95}{8}{8}
+\renewcommand{\bibliofont}{\normalsize\raggedright}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\newcommand{\NP}{\mathrm{NP}}
+\newcommand{\coNP}{\mathrm{coNP}}
+\newcommand{\FP}{\mathrm{FP}}
+\title[Minimum measurement dimension for network flows]{Minimum measurement dimension for capacitated network flows}
+\date{}
+\begin{document}
+\begin{abstract}
+The minimum number of linear cost measurements that determine the full optimizer set of a linear program remains hard to compute when the feasible polytope is nondegenerate. Exact dimension and constructing a minimum dataset are NP-hard under polynomial-time Turing reductions, even on directed acyclic network flows with one capacitated arc. Verifying a supplied dataset is coNP-complete under many-one reductions. In contrast, the empty dataset can be checked in polynomial time. The reduction compares two open cost priors on the same flow polytope.
+\end{abstract}
+\maketitle
+
+\section{The problem and results}
+Let $X=\{x\in\R^d:Ax=b,\ x\geq0\}$ be nonempty, bounded and rational, with $A$ of full row rank. Let $C\subseteq\R^d$ be a nonempty open rational polyhedron given by strict linear inequalities. A global sufficient dataset is a finite set $Q$ of vectors whose measurements $(q^\top c)_{q\in Q}$ determine the full set $\arg\min_{x\in X}c^\top x$ for every $c\in C$. Write $W(X,C)$ for the span of differences of vertices that minimize at some costs in $C$. For open convex $C$, the geometric characterization \cite[Corollary 1]{bennouna} says that $Q$ is sufficient exactly when its span contains $W(X,C)$ \cite[Corollary 4]{ye}. Thus the minimum size is $d^*(X,C)=\dim W(X,C)$.
+
+The nondegeneracy promise from \cite[Assumption 12]{ye} requires every vertex to have exactly $\operatorname{rank}(A)$ positive coordinates. The question in \cite[\S7]{ye} asks whether worst-case hardness persists under this promise.
+
+\begin{theorem}
+Computing $d^*$ and constructing a minimum global dataset are $\NP$-hard under polynomial-time Turing reductions. Hardness holds for nondegenerate DAG flow polytopes with one capacitated arc. Verifying a supplied dataset is $\coNP$-complete under polynomial-time many-one reductions. The empty dataset can be checked in polynomial time under the promise.
+\end{theorem}
+
+The dimension can be computed in polynomial time with $O(\log(d+1))$ queries to an $\NP$ oracle. A minimum dataset can be constructed in $\FP^{\NP}$.
+
+\section{A strict shortest-path gap}
+Start from the inverse shortest-path DAG of Ley and Merkert \cite[Theorem 3.1]{ley}, as used for unrestricted dimension by \cite[Appendix A.1]{ye}. A 3-SAT formula has $n$ variables and $m$ clauses of three occurrences each, with $n,m\geq1$. The graph begins at $s$ and traverses the variable gadgets in series. Each gadget has two two-arc paths through the two possible value vertices of that variable. A distinguished arc $r$ connects the end of the variable chain to the start of the clause chain. Each clause gadget has three two-arc options through its literal occurrence vertices. The clause chain ends at $t$. For every occurrence of variable $i$ in clause $j$, a forward shortcut joins its falsifying value vertex to that occurrence vertex. A path uses $r$ or exactly one shortcut, since every shortcut jumps from the variable chain to the clause chain.
+
+Assign baseline $d_e=1$ to non-shortcut arcs and $d_e=2(n-i+j)$ to that shortcut. A path through $r$ has baseline length $2n+2m+1$. A bypass has length $2n+2m$. Put $B=n+2m$, $\eta=1/2$, and weights $\kappa_e=1$ on regular arcs and $B+1$ on shortcuts. Define the open prior
+\[
+ C_0=\{d+w:\ w_e>0\ \text{for every arc }e,\quad \kappa^\top w<B+\eta\}.
+\]
+Set $h=(1-\eta)/(B+1)>0$.
+
+If the formula is unsatisfiable, the assignment on any $r$-path falsifies at least one clause. The chosen occurrence in that clause connects to the chosen value vertex by a shortcut. Replacing the intermediate subpath by this shortcut saves more than $1-w_e>h$, because all removed perturbations are positive and the shortcut alone consumes $(B+1)w_e$ of the budget.
+
+If the formula is satisfiable, choose a path $P$ through satisfying values and true occurrences. Mark the $n$ entry arcs to the unchosen value vertices and the $2m$ exit arcs from the unchosen occurrences. Every bypass pays a marked arc. Its shortcut either departs an unchosen value vertex or enters an unchosen occurrence, since the shortcut corresponds to falsification. Give every marked arc perturbation $1+\eta/(4B)$ and all others zero at first. This spends $B+\eta/4$. The marked perturbation offsets the one-unit baseline advantage of bypasses, leaving a strict gap of at least $\eta/(4B)$. A common positive rational increment on all arcs can spend less than $\eta/4$ and raise the cost of $P$ by less than $\eta/(8B)$. The resulting cost lies in $C_0$ and $P$ is strictly cheaper than every bypass.
+
+\section{A nondegenerate flow polytope}
+Replace $r$ with three parallel arcs, a cheap arc $u$ with capacity $K=1/2$ and two uncapped copies $f_1,f_2$. Add the slack $z\geq0$ with $x_u+z=K$. The original sink $t$ receives one unit. Assign every internal vertex $v_i$ demand $\epsilon_i=4^{-i-1}$, for $1\leq i\leq k$, and let $s$ supply $1+\sum_i\epsilon_i$. To obtain a feasible flow, send one unit on a bypass. Every internal vertex is reachable from $s$. Its extra demand can be sent on any directed path to it, even if those paths use $u$: their total weight is below $1/4$. The DAG flows and the slack are bounded.
+
+Use the incidence convention outgoing minus incoming. Delete the conservation row at $s$. The remaining incidence rows are independent by connectivity, and the slack column makes the capacity row independent. The resulting matrix is totally unimodular. Append the capacity row, which has a single nonzero entry, to the reduced incidence matrix and then append the unit slack column. Every nonsingular basis has determinant $\pm1$, so every inverse-basis entry is $0$, $1$ or $-1$ by the cofactor formula. Its basic values are signed sums with coefficients in this set of the right-hand-side entries
+\[
+              -1,\quad 1/2,\quad -\epsilon_1,\ldots,-\epsilon_k .
+\]
+Each inverse row is nonzero. If either of the first two entries is used, their contribution has magnitude at least $1/2$, more than the sum of all the remaining terms. Otherwise the largest used $\epsilon_i$ strictly exceeds the sum of the smaller ones. Each basic value is therefore nonzero. Feasible bases are positive in every basic coordinate, and every vertex is nondegenerate. The inputs have polynomial bit length.
+
+\section{Two open priors on the same flow}
+Write $a=c_u-c_z$ for the effective cost on $u$ after substituting $z=K-x_u$. Put $g=h/2$. The full prior $C_{\rm full}$ requires, for each $i=1,2$, that the original cost vector obtained by pricing $r$ at $c_{f_i}$ lies in $C_0$, and that $0<c_{f_i}-a<g$. The ordered prior $C_{\rm one}$ adds $c_{f_1}<c_{f_2}$. Both are open rational polyhedra in the ambient space. Choose equal flag prices at the $r$-cost of any point in $C_0$ and take $a=c_{f_1}-g/2$. Strict inequalities persist if $c_{f_2}$ is raised a little, showing nonemptiness also for the ordered prior.
+
+Let $\pi$ merge $x_{f_1},x_{f_2}$ into $F=x_{f_1}+x_{f_2}$ and leave the other coordinates fixed. Given $c$, the projected optimizer set is exactly that of the merged problem with price $\min(c_{f_1},c_{f_2})$ on $F$. At a tie every split is feasible and optimal if the merged flow is optimal. Otherwise positive $F$ uses the cheaper copy. Every effective cost from $C_{\rm full}$ also occurs in $C_{\rm one}$ by putting the cheaper price on $f_1$ and the other price a little higher if needed. The strict inequalities permit this. The projected unions of optimizer sets are identical, so $\pi W(X,C_{\rm full})=\pi W(X,C_{\rm one})$. To see this for vertex spans, use that each optimal face is the convex hull of its optimal vertices.
+
+\section{When the exchange direction appears}
+Every feasible DAG flow can be decomposed into source paths ending either at $t$, with total weight one, or at internal sinks, with total weight less than $1/4$. In a NO instance, consider the original prior with $r$ priced at $\min(c_{f_1},c_{f_2})$. A positive source-to-$t$ component on a copy of $r$ is at most $g$ cheaper per unit than the corresponding original path. Its bypass saves more than $h$ in the original prior. Replacing that portion of flow by the bypass strictly improves the objective without increasing flow on $u$. Thus no such component occurs at an optimum. The total flow on the three copies is below $1/4$, leaving spare capacity on $u$. Positive flow on either $f_i$ can be shifted to $u$ at a strict saving, so all optimal flows have $x_{f_1}=x_{f_2}=0$.
+
+In a YES instance, use the $C_0$ witness from Section 2, both $f_i$ priced at the same original $r$-cost, and the cheap arc discounted by $g/2$. If an optimum used neither uncapped copy, its one unit to $t$ could use at most $K$ on paths through $u$. Some positive source-to-$t$ component thus uses a bypass. Replacing part of that component with $P$ on an uncapped copy strictly improves the objective, while preserving the capacity and balances. Thus optimal $F>0$. Its two pure splits are both optimal and their difference spans $k_0=e_{f_1}-e_{f_2}$.
+
+The merging map has kernel $\operatorname{span}\{k_0\}$. In $C_{\rm one}$ all optimal flows have $x_{f_2}=0$, so it is injective on that direction space. In $C_{\rm full}$ its intersection with the direction space has dimension one in YES and zero in NO. With equal projected spaces, rank-nullity gives
+\[
+ d^*(X,C_{\rm full})-d^*(X,C_{\rm one})=
+ \begin{cases}1 &\text{if the formula is satisfiable},\\0 &\text{otherwise}.\end{cases}
+\]
+This is a polynomial-time reduction using two oracle calls. An oracle returning a minimum dataset reveals $d^*$ by its size.
+
+For supplied-dataset verification, query every coordinate other than the two flags and query their sum. The span is $k_0^\perp$. It contains $W(X,C_{\rm full})$ in NO and fails to contain $k_0$ in YES. This is a many-one reduction from UNSAT. The same construction need not show hardness for a single dimension-threshold instance.
+
+\begin{figure}[t]
+\centering
+\setlength{\tabcolsep}{9pt}
+\begin{tabular}{c|c|c|c}
+parallel arc $s\to t$ & capacity & tied cost & possible optimal flow\\ \hline
+$u$ & $1/2$ & $1$ & $1/2$\\
+$f_1$ & none & $2$ & $\lambda$\\
+$f_2$ & none & $2$ & $1/2-\lambda$\\
+bypass & none & $3$ & $0$
+\end{tabular}
+\caption{A unit-flow illustration. At the displayed prices, $0\leq\lambda\leq1/2$ and both endpoints are optimal. Strictly ordering the two middle prices fixes the split. The six vertices of this four-arc polytope each have two positive coordinates after adding the capacity slack.}
+\end{figure}
+
+\section{Oracle upper bounds and the empty dataset}
+On the nondegenerate promise, a vertex has a unique basis, indexed by its positive coordinates. Its cost optimality cone is given by the nonnegative reduced-cost inequalities of that basis. A candidate basis is reachable if it is feasible and its optimality cone meets $C$. The intersection test is an LP: add a common positive slack to the strict inequalities, cap it by one and ask if its maximum is positive.
+
+A certificate for $d^*\geq j$ lists $j+1$ reachable bases whose $j$ differences from the first vertex are independent. Thus binary search computes $d^*$ in polynomial time with logarithmically many $\NP$ queries. A standard prefix search with an $\NP$ oracle extracts a full witness of maximum rank and thereby a basis of the direction space. A certificate for insufficient measurement is two reachable bases whose vertex difference lies outside the supplied span. This proves the upper bound for verification.
+
+For the empty dataset, find a cost in $C$ by strict LP feasibility and choose one optimal vertex. Test whether every inequality of its unique optimality cone holds on all of $C$, by solving a strict feasibility problem for each violation. If this vertex is optimal throughout $C$, it cannot tie with a different point at any cost in $C$. A small perturbation within the open prior would make that other point strictly better. Hence the argmin set is constant exactly when the cone test passes. This is polynomial.
+
+The theorem concerns full optimizer recovery from one exact dataset. Pointwise recovery, approximate cardinality and noisy measurements are separate problems. Affine solver compression and sample-based recovery are studied by Ye and Bennouna \cite{compression}.
+
+\section*{AI assistance}
+ChatGPT Astra 6.2 (OpenAI) generated the recovered reduction and original finite replay under human direction. OpenAI Codex independently reviewed the mathematics. GPT-6.2 Sol (OpenAI) checked the primary sources and prepared this manuscript, the extended replay and the worked illustration. DannyExperiments is the project citation identity.
+
+\bibliographystyle{amsplain}
+\bibliography{references}
+\end{document}

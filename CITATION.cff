@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "Cite this version of the research release."
+title: "Minimum measurement dimension for capacitated network flows"
+authors:
+  - name: "DannyExperiments"
+type: software
+version: "1.0.0"
+date-released: 2026-11-27
+repository-code: "https://github.com/DannyExperiments/minimum-measurement-dimension-flows"
+keywords:
+  - "decision-sufficient data"
+  - "linear optimization"
+  - "network flows"
+  - "nondegenerate linear programs"
+  - "complexity theory"
+  - "minimum measurement dimension"
+  - "inverse shortest path"
+doi: "10.5281/zenodo.24570846"
+url: "https://doi.org/10.5281/zenodo.24570846"
+preferred-citation:
+  type: software
+  title: "Minimum measurement dimension for capacitated network flows"
+  authors:
+    - name: "DannyExperiments"
+  version: "1.0.0"
+  date-released: 2026-11-27
+  doi: "10.5281/zenodo.24570846"
+  url: "https://doi.org/10.5281/zenodo.24570846"
+  repository-code: "https://github.com/DannyExperiments/minimum-measurement-dimension-flows"

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two routes can tie</title>
+<style>
+*{box-sizing:border-box}body{background:#f4f7fa;color:#17283f;font:1rem/1.45 system-ui,sans-serif;margin:0;padding:1.15rem}main{max-width:38rem;margin:auto}h1{font-size:clamp(1.8rem,6vw,3rem);line-height:1.12;margin:0}.buttons{display:flex;flex-wrap:wrap;gap:.45rem;padding:.5rem 0}button{border:1px solid #7286a0;border-radius:.55rem;background:white;color:inherit;font:inherit;font-weight:700;padding:.45rem .65rem}button[aria-pressed=true]{background:#17283f;color:white}button:focus-visible,input:focus-visible{outline:3px solid #0070ad;outline-offset:3px}table{background:white;width:100%;border-collapse:collapse;margin:.75rem 0}td,th{text-align:left;padding:.48rem;border-bottom:1px solid #d9e2eb}.active{color:#0c5f52;font-weight:700}input{width:100%;display:block;margin:.45rem 0}.why{min-height:3em;font-weight:600}
+</style>
+<main>
+<h1>Two routes can tie</h1>
+<p>Route one unit from s to t over four parallel arcs. The cheap arc u can carry at most 1/2. Pick a set of costs to inspect its exact optimal flows.</p>
+<div class="buttons" id="choices" aria-label="Cost settings"></div>
+<table aria-label="Prices and flows on parallel arcs">
+<thead><tr><th>Arc</th><th>Capacity</th><th>Cost</th><th>Flow</th></tr></thead>
+<tbody id="rows"></tbody>
+</table>
+<label for="split">Leftover flow on f1: <output id="amount">1/2</output></label>
+<input type="range" id="split" min="0" max="8" step="1" value="8">
+<p class="why" id="why" aria-live="polite"></p>
+<p>Knowing only the sum of the two flags’ flows hides the exchange. The reduction in the paper turns that exchange into a test of satisfiability.</p>
+</main>
+<script>
+'use strict';
+const node = id => document.getElementById(id);
+const names = ['Capped arc u','Flag f1','Flag f2','Bypass'];
+const modes = {
+  tie: {label:'Equal flag costs', prices:['1','2','2','3'],
+        why:'Any split of the last 1/2 is optimal. Changing the split gives one direction.'},
+  order: {label:'Flag f1 cheaper', prices:['1','2','5/2','3'],
+          why:'Only f1 carries the leftover flow. There is no exchange at these ordered costs.'},
+  bypass: {label:'Bypass cheapest', prices:['1','2','2','1/2'],
+           why:'All flow uses the bypass. Neither flag carries flow, even though their costs match.'},
+};
+let mode = 'tie';
+function fraction(n) {
+  if (n===0) return '0';
+  let d=16;
+  while (n%2===0 && d>1) {n/=2;d/=2;}
+  return d===1 ? String(n) : n+'/'+d;
+}
+function show() {
+  const slider=node('split');
+  const part=mode==='tie'?Number(slider.value):mode==='order'?8:0;
+  slider.disabled=mode!=='tie';
+  node('amount').textContent=fraction(part);
+  slider.setAttribute('aria-valuetext',fraction(part));
+  const flows=mode==='bypass'?['0','0','0','1']:['1/2',fraction(part),fraction(8-part),'0'];
+  node('rows').replaceChildren();
+  for (let i=0;i<names.length;i++) {
+    const row=document.createElement('tr');
+    for (const value of [names[i],i===0?'1/2':'Uncapped',modes[mode].prices[i],flows[i]]) {
+      const cell=document.createElement('td');cell.textContent=value;row.appendChild(cell);
+    }
+    row.className=flows[i]==='0'?'':'active';
+    node('rows').appendChild(row);
+  }
+  node('why').textContent=modes[mode].why;
+  for (const button of node('choices').children) button.setAttribute('aria-pressed',String(button.dataset.mode===mode));
+}
+for (const [value,state] of Object.entries(modes)) {
+  const button=document.createElement('button');
+  button.type='button';button.dataset.mode=value;button.textContent=state.label;
+  button.addEventListener('click',()=>{mode=value;show();});node('choices').appendChild(button);
+}
+node('split').addEventListener('input',show);
+show();
+</script>
+</html>

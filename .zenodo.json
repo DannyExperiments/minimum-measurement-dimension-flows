@@ -1,0 +1,31 @@
+{
+  "title": "Minimum measurement dimension for capacitated network flows",
+  "upload_type": "software",
+  "publication_date": "2026-11-27",
+  "version": "1.0.0",
+  "creators": [
+    {
+      "name": "DannyExperiments"
+    }
+  ],
+  "keywords": [
+    "decision-sufficient data",
+    "linear optimization",
+    "network flows",
+    "nondegenerate linear programs",
+    "complexity theory",
+    "minimum measurement dimension",
+    "inverse shortest path"
+  ],
+  "description": "<p>This note answers the nondegenerate case of the minimum global measurement problem posed by Ye, Amin and Özdağlar at COLT 2026. A fixed set of exact linear measurements of an unknown cost vector must determine the complete optimizer set for every cost in an open polyhedral prior. Computing its minimum size and constructing a minimum dataset are NP-hard under polynomial-time Turing reductions, even for a directed acyclic flow polytope with one capacitated arc. Verifying a supplied dataset is coNP-complete under many-one reductions. Verifying the empty dataset is polynomial under the nondegeneracy promise.</p><p>The proof adapts Ley and Merkert’s inverse shortest-path construction. Small internal demands force every vertex to have full basic support. A half-capacity arc and two uncapped flags make the dimension difference for two open priors detect satisfiability. After merging the flags, both priors have the same projected optimizing sets. The dimension differs exactly when a tied flag flow can be exchanged. Exact dimension has a logarithmic-query NP-oracle upper bound. Minimum-dataset construction uses a polynomial-time NP oracle.</p><p>The deposit includes the PDF, LaTeX source, BibTeX references, citation metadata, a reproducibility archive and checksums. The exact replay checks 80 path fixtures, 59,048 signed right-hand-side patterns, and the six vertices of an illustrated flow. The offline explorer varies the flow between the flags. Internally reviewed. External peer review is pending.</p><p>ChatGPT Astra 6.2 (OpenAI) generated the recovered reduction and original finite replay under human direction. OpenAI Codex independently reviewed the mathematics. GPT-6.2 Sol (OpenAI) checked primary sources and prepared the manuscript, extended finite replay and worked illustration. DannyExperiments is the project citation identity.</p>",
+  "access_right": "open",
+  "license": "other-closed",
+  "notes": "All rights reserved. Publicly downloadable files are supplied without a repository-wide reuse license.",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/DannyExperiments/minimum-measurement-dimension-flows/releases/tag/v1.0.0",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}
