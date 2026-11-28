@@ -4,4 +4,4 @@
 
 Computing the exact global measurement dimension and constructing a minimum dataset remain NP-hard under Turing reductions with the nondegeneracy promise. Verifying a supplied dataset is coNP-complete under many-one reductions, while the empty case is polynomial.
 
-The argument has undergone internal mathematical review. External peer review and formalization are pending. The [literature audit](audits/public_safe_reports/LITERATURE_AUDIT.md) records the distinction from prior unrestricted and pointwise results.
+The argument has undergone internal mathematical review. The [Lean certificate](formalization/README.md) checks a supporting result. External peer review is pending. The [literature audit](audits/public_safe_reports/LITERATURE_AUDIT.md) records the distinction from prior unrestricted and pointwise results.
